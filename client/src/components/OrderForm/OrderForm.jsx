@@ -2,7 +2,7 @@ import { useState } from "react";
 import axios from "axios";
 
 // 🔥 IMPORTANT: apna IP yaha daal
-const API_URL = "http://10.61.254.172:5000";
+https://marwadi-backend.onrender.com/api/bookings
 
 const OrderForm = () => {
   const [form, setForm] = useState({
