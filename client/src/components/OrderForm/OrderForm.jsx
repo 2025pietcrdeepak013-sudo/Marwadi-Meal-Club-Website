@@ -45,6 +45,7 @@ const OrderForm = () => {
         address: "",
         plan: "",
       });
+
     } catch (err) {
       if (err.response) {
         alert(err.response.data.error || "Server Error ❌");
@@ -57,102 +58,17 @@ const OrderForm = () => {
   };
 
   return (
-    <div style={{ maxWidth: "500px", margin: "40px auto", padding: "20px" }}>
-      <h2 style={{ textAlign: "center", marginBottom: "20px" }}>
-        Book Your Plan
-      </h2>
+    <div>
+      <h2>Order Form Working ✅</h2>
 
       <form onSubmit={handleSubmit}>
-        <div style={{ marginBottom: "15px" }}>
-          <label>Name</label>
-          <input
-            type="text"
-            name="name"
-            value={form.name}
-            onChange={handleChange}
-            placeholder="Enter your name"
-            style={{
-              width: "100%",
-              padding: "10px",
-              marginTop: "5px",
-              borderRadius: "6px",
-              border: "1px solid #ccc",
-            }}
-          />
-        </div>
+        <input name="name" value={form.name} onChange={handleChange} placeholder="Name" />
+        <input name="phone" value={form.phone} onChange={handleChange} placeholder="Phone" />
+        <input name="address" value={form.address} onChange={handleChange} placeholder="Address" />
+        <input name="plan" value={form.plan} onChange={handleChange} placeholder="Plan" />
 
-        <div style={{ marginBottom: "15px" }}>
-          <label>Phone</label>
-          <input
-            type="tel"
-            name="phone"
-            value={form.phone}
-            onChange={handleChange}
-            placeholder="Enter phone number"
-            style={{
-              width: "100%",
-              padding: "10px",
-              marginTop: "5px",
-              borderRadius: "6px",
-              border: "1px solid #ccc",
-            }}
-          />
-        </div>
-
-        <div style={{ marginBottom: "15px" }}>
-          <label>Address</label>
-          <textarea
-            name="address"
-            value={form.address}
-            onChange={handleChange}
-            placeholder="Enter full address"
-            rows="3"
-            style={{
-              width: "100%",
-              padding: "10px",
-              marginTop: "5px",
-              borderRadius: "6px",
-              border: "1px solid #ccc",
-            }}
-          />
-        </div>
-
-        <div style={{ marginBottom: "20px" }}>
-          <label>Select Plan</label>
-          <select
-            name="plan"
-            value={form.plan}
-            onChange={handleChange}
-            style={{
-              width: "100%",
-              padding: "10px",
-              marginTop: "5px",
-              borderRadius: "6px",
-              border: "1px solid #ccc",
-            }}
-          >
-            <option value="">-- Select Plan --</option>
-            <option value="Basic">Basic</option>
-            <option value="Standard">Standard</option>
-            <option value="Premium">Premium</option>
-          </select>
-        </div>
-
-        <button
-          type="submit"
-          disabled={loading}
-          style={{
-            width: "100%",
-            padding: "12px",
-            backgroundColor: loading ? "#999" : "#2563eb",
-            color: "white",
-            border: "none",
-            borderRadius: "6px",
-            fontSize: "16px",
-            cursor: loading ? "not-allowed" : "pointer",
-          }}
-        >
-          {loading ? "Submitting..." : "Submit Booking"}
+        <button type="submit" disabled={loading}>
+          {loading ? "Booking..." : "Book"}
         </button>
       </form>
     </div>
