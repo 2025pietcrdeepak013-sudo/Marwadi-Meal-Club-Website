@@ -1,11 +1,11 @@
 import Navbar from './components/Navbar/Navbar.jsx';
-import Hero from "./components/Hero/Hero";
-import Plans from "./components/Plans/Plans";
-import Reviews from "./components/Reviews/Reviews";
-import OrderForm from "./components/OrderForm/OrderForm";
-import Footer from "./components/Footer/Footer";
-import WhyChooseUs from "./components/WhyChooseUs/WhyChooseUs";
-import SundaySpecial from "./components/SundaySpecial/SundaySpecial";
+import Hero from "./components/Hero/Hero.jsx";
+import Plans from "./components/Plans/Plans.jsx";
+import Reviews from "./components/Reviews/Reviews.jsx";
+import OrderForm from "./components/OrderForm/OrderForm.jsx";
+import Footer from "./components/Footer/Footer.jsx";
+import WhyChooseUs from "./components/WhyChooseUs/WhyChooseUs.jsx";
+import SundaySpecial from "./components/SundaySpecial/SundaySpecial.jsx";
 
 import { FaWhatsapp, FaPhoneAlt } from "react-icons/fa";
 
