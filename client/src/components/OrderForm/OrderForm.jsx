@@ -12,6 +12,7 @@ const OrderForm = () => {
   });
 
   const [loading, setLoading] = useState(false);
+  const [success, setSuccess] = useState("");
 
   const handleChange = (e) => {
     setForm({
@@ -32,14 +33,11 @@ const OrderForm = () => {
       setLoading(true);
 
       const res = await axios.post(`${API_URL}/api/bookings`, {
-        name: form.name,
-        phone: form.phone,
-        address: form.address,
-        plan: form.plan,
+        ...form,
         message: "",
       });
 
-      alert(res?.data?.message || "Booking Successful ✅");
+      setSuccess(res?.data?.message || "Booking Successful ✅");
 
       setForm({
         name: "",
@@ -60,20 +58,78 @@ const OrderForm = () => {
   };
 
   return (
-    <div>
-      <h2>Order Form Working ✅</h2>
+    <section className="min-h-screen flex items-center justify-center bg-gradient-to-br from-orange-100 to-green-100 p-5">
 
-      <form onSubmit={handleSubmit}>
-        <input name="name" value={form.name} onChange={handleChange} placeholder="Name" />
-        <input name="phone" value={form.phone} onChange={handleChange} placeholder="Phone" />
-        <input name="address" value={form.address} onChange={handleChange} placeholder="Address" />
-        <input name="plan" value={form.plan} onChange={handleChange} placeholder="Plan" />
+      <div className="bg-white shadow-2xl rounded-3xl w-full max-w-lg p-8">
 
-        <button type="submit" disabled={loading}>
-          {loading ? "Booking..." : "Book"}
-        </button>
-      </form>
-    </div>
+        <h2 className="text-3xl font-bold text-center text-green-700">
+          🍱 Book Your Tiffin
+        </h2>
+
+        <p className="text-center text-gray-500 mt-2">
+          Fresh homemade food delivered to your door
+        </p>
+
+        {success && (
+          <div className="bg-green-100 text-green-700 p-3 rounded-lg mt-4 text-center">
+            {success}
+          </div>
+        )}
+
+        <form onSubmit={handleSubmit} className="mt-6 space-y-5">
+
+          <input
+            type="text"
+            name="name"
+            value={form.name}
+            onChange={handleChange}
+            placeholder="👤 Full Name"
+            className="w-full border p-3 rounded-xl focus:ring-2 focus:ring-green-500 outline-none"
+          />
+
+          <input
+            type="tel"
+            name="phone"
+            value={form.phone}
+            onChange={handleChange}
+            placeholder="📞 Mobile Number"
+            className="w-full border p-3 rounded-xl focus:ring-2 focus:ring-green-500 outline-none"
+          />
+
+          <textarea
+            name="address"
+            value={form.address}
+            onChange={handleChange}
+            placeholder="📍 Full Address"
+            className="w-full border p-3 rounded-xl focus:ring-2 focus:ring-green-500 outline-none"
+          />
+
+          <select
+            name="plan"
+            value={form.plan}
+            onChange={handleChange}
+            className="w-full border p-3 rounded-xl focus:ring-2 focus:ring-green-500 outline-none"
+          >
+            <option value="">🍛 Select Meal Plan</option>
+            <option value="One Time Meal - ₹2400">
+              One Time Meal - ₹2400
+            </option>
+            <option value="Two Time Meal - ₹4000">
+              Two Time Meal - ₹4000
+            </option>
+          </select>
+
+          <button
+            type="submit"
+            disabled={loading}
+            className="w-full bg-gradient-to-r from-orange-500 to-green-600 text-white py-3 rounded-xl font-semibold hover:scale-105 transition"
+          >
+            {loading ? "Booking..." : "🚀 Book Now"}
+          </button>
+
+        </form>
+      </div>
+    </section>
   );
 };
 
