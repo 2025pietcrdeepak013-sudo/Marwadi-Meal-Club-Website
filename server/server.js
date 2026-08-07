@@ -1,10 +1,12 @@
 const express = require("express");
 const app = express();
-
+const cors = require("cors");
 const bookingRoutes = require("./routes/bookingRoutes");
 
 // 🔥 BODY PARSE
 app.use(express.json());
+
+app.use(cors());
 
 // 🔥 TEST ROUTE
 app.get("/", (req, res) => {
