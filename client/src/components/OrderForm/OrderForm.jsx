@@ -58,20 +58,26 @@ const OrderForm = () => {
   };
 
   return (
-    <div>
-      <h2>Order Form Working ✅</h2>
+    <section className="min-h-screen flex items-center justify-center bg-gradient-to-br from-orange-100 to-green-100 p-5">
 
-      <form onSubmit={handleSubmit}>
-        <input name="name" value={form.name} onChange={handleChange} placeholder="Name" />
-        <input name="phone" value={form.phone} onChange={handleChange} placeholder="Phone" />
-        <input name="address" value={form.address} onChange={handleChange} placeholder="Address" />
-        <input name="plan" value={form.plan} onChange={handleChange} placeholder="Plan" />
+      <div className="bg-white shadow-2xl rounded-3xl w-full max-w-lg p-8">
 
-        <button type="submit" disabled={loading}>
-          {loading ? "Booking..." : "Book"}
-        </button>
-      </form>
-    </div>
+        <h2 className="text-3xl font-bold text-center text-green-700">
+          🍱 Book Your Tiffin
+        </h2>
+
+        <p className="text-center text-gray-500 mt-2">
+          Fresh homemade food delivered to your door
+        </p>
+
+        {success && (
+          <p className="text-green-500 text-center font-bold mt-4">
+            {success}
+          </p>
+        )}
+
+      </div>
+    </section>
   );
 };
 
