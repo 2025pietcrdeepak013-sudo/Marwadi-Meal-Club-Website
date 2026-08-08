@@ -1,0 +1,14 @@
+services:
+  - type: web
+    name: marwadi-backend
+    runtime: node
+    plan: free
+    buildCommand: cd server && npm install
+    startCommand: cd server && node server.js
+    envVars:
+      - key: PORT
+        value: 5000
+      - key: MONGO_URI
+        value: mongodb+srv://aiart7964_db_user:Deepak12345@cluster0.wjukj0r.mongodb.net/marwadimealclub?retryWrites=true&w=majority&appName=Cluster0
+      - key: NODE_ENV
+        value: production
