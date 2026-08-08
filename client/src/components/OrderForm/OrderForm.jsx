@@ -1,7 +1,8 @@
 import { useState } from "react";
 import axios from "axios";
 
-const API_URL = "https://marwadi-backend.onrender.com";
+// Use localhost for development, production URL for production
+const API_URL = import.meta.env.VITE_API_URL || "http://localhost:5000";
 
 const OrderForm = () => {
   const [form, setForm] = useState({
@@ -71,9 +72,9 @@ const OrderForm = () => {
         </p>
 
         {success && (
-          <p className="text-green-500 text-center font-bold mt-4">
+          <div className="bg-green-100 border border-green-500 text-green-700 px-4 py-3 rounded-lg mt-4 text-center font-bold">
             {success}
-          </p>
+          </div>
         )}
 
         <form onSubmit={handleSubmit} className="mt-6 space-y-4">
@@ -134,9 +135,8 @@ const OrderForm = () => {
               className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500"
             >
               <option value="">-- Choose a Plan --</option>
-              <option value="Basic">Basic Plan</option>
-              <option value="Standard">Standard Plan</option>
-              <option value="Premium">Premium Plan</option>
+              <option value="One Time Meal">🍱 One Time Meal - ₹2,400</option>
+              <option value="Two Time Meal">🍱 Two Time Meal - ₹4,000</option>
             </select>
           </div>
 

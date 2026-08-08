@@ -3,6 +3,26 @@ const pool = require("../config/db");
 
 const router = express.Router();
 
+// ✅ TEST DATABASE CONNECTION
+router.get("/test-db", async (req, res) => {
+  try {
+    const conn = await pool.getConnection();
+    const result = await conn.execute("SELECT 1 as connected");
+    conn.release();
+    
+    res.json({
+      success: true,
+      message: "Database connected successfully ✅",
+    });
+  } catch (err) {
+    res.status(500).json({
+      success: false,
+      error: "Database connection failed",
+      message: err.message,
+    });
+  }
+});
+
 // ✅ CREATE BOOKING
 router.post("/", async (req, res) => {
   const { name, phone, address, plan, message } = req.body;
@@ -15,8 +35,9 @@ router.post("/", async (req, res) => {
     });
   }
 
+  let conn;
   try {
-    const conn = await pool.getConnection();
+    conn = await pool.getConnection();
     
     const query = `
       INSERT INTO bookings (name, phone, address, plan, message, created_at)
@@ -31,9 +52,7 @@ router.post("/", async (req, res) => {
       message || "",
     ]);
 
-    conn.release();
-
-    console.log("✅ Booking Saved:", result.insertId);
+    console.log("✅ Booking Saved - ID:", result.insertId);
 
     return res.json({
       success: true,
@@ -41,10 +60,35 @@ router.post("/", async (req, res) => {
       bookingId: result.insertId,
     });
   } catch (err) {
-    console.error("❌ Error:", err.message);
+    console.error("❌ Database Error:", err.message);
     return res.status(500).json({
-      error: err.message || "Server Error ❌",
+      error: "Database Error: " + err.message,
       success: false,
+    });
+  } finally {
+    if (conn) {
+      conn.release();
+    }
+  }
+});
+
+// ✅ GET ALL BOOKINGS
+router.get("/all", async (req, res) => {
+  try {
+    const conn = await pool.getConnection();
+    const [bookings] = await conn.execute("SELECT * FROM bookings ORDER BY created_at DESC");
+    conn.release();
+
+    res.json({
+      success: true,
+      count: bookings.length,
+      bookings,
+    });
+  } catch (err) {
+    res.status(500).json({
+      error: "Failed to fetch bookings",
+      success: false,
+      message: err.message,
     });
   }
 });
