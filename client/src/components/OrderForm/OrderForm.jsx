@@ -32,13 +32,19 @@ const OrderForm = () => {
 
     try {
       setLoading(true);
+      
+      console.log("📤 Sending booking to:", `${API_URL}/api/bookings`);
 
       const res = await axios.post(`${API_URL}/api/bookings`, {
         ...form,
         message: "",
+      }, {
+        timeout: 10000, // 10 seconds timeout
       });
 
       setSuccess(res?.data?.message || "Booking Successful ✅");
+      
+      console.log("✅ Booking successful:", res.data);
 
       setForm({
         name: "",
@@ -46,12 +52,20 @@ const OrderForm = () => {
         address: "",
         plan: "",
       });
+      
+      // Clear success message after 3 seconds
+      setTimeout(() => setSuccess(""), 3000);
 
     } catch (err) {
+      console.error("❌ Booking error:", err.message);
+      console.error("Error details:", err);
+      
       if (err.response) {
         alert(err.response.data.error || "Server Error ❌");
+      } else if (err.code === 'ECONNABORTED') {
+        alert("Request timeout - Backend took too long to respond ❌");
       } else {
-        alert("Cannot connect to backend ❌");
+        alert(`Cannot connect to backend at ${API_URL} ❌\n\nMake sure:\n1. Backend server is running\n2. URL is correct`);
       }
     } finally {
       setLoading(false);

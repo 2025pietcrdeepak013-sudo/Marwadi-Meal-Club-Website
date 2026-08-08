@@ -6,14 +6,17 @@ let isInitialized = false;
 async function initializeDatabase() {
   if (isInitialized) return;
 
-  const connection = await mysql.createConnection({
-    host: process.env.DB_HOST || "localhost",
-    user: process.env.DB_USER || "root",
-    password: process.env.DB_PASSWORD || "",
-  });
-
+  let connection;
   try {
     console.log("📦 Creating database if not exists...");
+    
+    connection = await mysql.createConnection({
+      host: process.env.DB_HOST || "localhost",
+      user: process.env.DB_USER || "root",
+      password: process.env.DB_PASSWORD || "",
+    });
+
+    console.log("✅ Connected to MySQL server");
     
     // Create database
     await connection.query(
@@ -46,9 +49,16 @@ async function initializeDatabase() {
     isInitialized = true;
   } catch (err) {
     console.error("❌ Database initialization error:", err.message);
+    console.error("Full error:", err);
     throw err;
   } finally {
-    await connection.end();
+    if (connection) {
+      try {
+        await connection.end();
+      } catch (e) {
+        console.error("Error closing connection:", e.message);
+      }
+    }
   }
 }
 
