@@ -1,19 +1,16 @@
 const express = require("express");
-const { getPool } = require("../config/db");
+const Booking = require("../models/Booking");
 
 const router = express.Router();
 
 // ✅ TEST DATABASE CONNECTION
 router.get("/test-db", async (req, res) => {
   try {
-    const pool = await getPool();
-    const conn = await pool.getConnection();
-    const result = await conn.execute("SELECT 1 as connected");
-    conn.release();
-    
+    const bookingCount = await Booking.countDocuments();
     res.json({
       success: true,
       message: "Database connected successfully ✅",
+      totalBookings: bookingCount,
     });
   } catch (err) {
     res.status(500).json({
@@ -36,30 +33,25 @@ router.post("/", async (req, res) => {
     });
   }
 
-  let conn;
   try {
-    const pool = await getPool();
-    conn = await pool.getConnection();
-    
-    const query = `
-      INSERT INTO bookings (name, phone, address, plan, message, created_at)
-      VALUES (?, ?, ?, ?, ?, NOW())
-    `;
-    
-    const [result] = await conn.execute(query, [
+    console.log("📤 Creating booking:", { name, phone, plan });
+
+    const booking = new Booking({
       name,
       phone,
       address,
       plan,
-      message || "",
-    ]);
+      message: message || "",
+    });
 
-    console.log("✅ Booking Saved - ID:", result.insertId);
+    const savedBooking = await booking.save();
+
+    console.log("✅ Booking Saved - ID:", savedBooking._id);
 
     return res.json({
       success: true,
       message: "Booking Successful ✅",
-      bookingId: result.insertId,
+      bookingId: savedBooking._id,
     });
   } catch (err) {
     console.error("❌ Database Error:", err.message);
@@ -67,20 +59,13 @@ router.post("/", async (req, res) => {
       error: "Database Error: " + err.message,
       success: false,
     });
-  } finally {
-    if (conn) {
-      conn.release();
-    }
   }
 });
 
 // ✅ GET ALL BOOKINGS
 router.get("/all", async (req, res) => {
   try {
-    const pool = await getPool();
-    const conn = await pool.getConnection();
-    const [bookings] = await conn.execute("SELECT * FROM bookings ORDER BY created_at DESC");
-    conn.release();
+    const bookings = await Booking.find().sort({ createdAt: -1 });
 
     res.json({
       success: true,

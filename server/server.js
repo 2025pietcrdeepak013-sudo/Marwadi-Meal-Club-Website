@@ -3,12 +3,11 @@ require("dotenv").config();
 const express = require("express");
 const app = express();
 const cors = require("cors");
+const connectDB = require("./config/mongodb");
 const bookingRoutes = require("./routes/bookingRoutes");
-const { initializeDatabase } = require("./config/db");
 
 // 🔥 BODY PARSE
 app.use(express.json());
-
 app.use(cors());
 
 // 🔥 TEST ROUTE
@@ -24,10 +23,14 @@ const PORT = process.env.PORT || 5000;
 
 async function startServer() {
   try {
-    // Initialize database first
-    console.log("🔄 Initializing database...");
-    await initializeDatabase();
-    console.log("✅ Database initialization complete");
+    // Connect to MongoDB
+    console.log("🔄 Connecting to MongoDB...");
+    const connected = await connectDB();
+    
+    if (!connected) {
+      console.error("❌ Failed to connect to MongoDB");
+      process.exit(1);
+    }
 
     app.listen(PORT, "0.0.0.0", () => {
       console.log(`✅ Server Running on Port ${PORT}`);
