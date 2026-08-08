@@ -1,24 +1,52 @@
-import express from "express";
+const express = require("express");
+const pool = require("../config/db");
 
 const router = express.Router();
 
-// ✅ TEMP ROUTE (NO DATABASE)
-router.post("/", (req, res) => {
-  const { name, phone, address, plan } = req.body;
+// ✅ CREATE BOOKING
+router.post("/", async (req, res) => {
+  const { name, phone, address, plan, message } = req.body;
 
+  // Validation
   if (!name || !phone || !address || !plan) {
     return res.status(400).json({
+      error: "All fields required",
       success: false,
-      message: "All fields required",
     });
   }
 
-  console.log("📦 Booking Received:", req.body);
+  try {
+    const conn = await pool.getConnection();
+    
+    const query = `
+      INSERT INTO bookings (name, phone, address, plan, message, created_at)
+      VALUES (?, ?, ?, ?, ?, NOW())
+    `;
+    
+    const [result] = await conn.execute(query, [
+      name,
+      phone,
+      address,
+      plan,
+      message || "",
+    ]);
 
-  return res.json({
-    success: true,
-    message: "Booking Successful 🎉 (No DB)",
-  });
+    conn.release();
+
+    console.log("✅ Booking Saved:", result.insertId);
+
+    return res.json({
+      success: true,
+      message: "Booking Successful ✅",
+      bookingId: result.insertId,
+    });
+  } catch (err) {
+    console.error("❌ Error:", err.message);
+    return res.status(500).json({
+      error: err.message || "Server Error ❌",
+      success: false,
+    });
+  }
 });
 
 // ✅ TEST ROUTE
@@ -29,4 +57,4 @@ router.get("/", (req, res) => {
   });
 });
 
-export default router;
+module.exports = router;
