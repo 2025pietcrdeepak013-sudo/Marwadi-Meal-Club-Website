@@ -1,11 +1,12 @@
 const express = require("express");
-const pool = require("../config/db");
+const { getPool } = require("../config/db");
 
 const router = express.Router();
 
 // ✅ TEST DATABASE CONNECTION
 router.get("/test-db", async (req, res) => {
   try {
+    const pool = await getPool();
     const conn = await pool.getConnection();
     const result = await conn.execute("SELECT 1 as connected");
     conn.release();
@@ -37,6 +38,7 @@ router.post("/", async (req, res) => {
 
   let conn;
   try {
+    const pool = await getPool();
     conn = await pool.getConnection();
     
     const query = `
@@ -75,6 +77,7 @@ router.post("/", async (req, res) => {
 // ✅ GET ALL BOOKINGS
 router.get("/all", async (req, res) => {
   try {
+    const pool = await getPool();
     const conn = await pool.getConnection();
     const [bookings] = await conn.execute("SELECT * FROM bookings ORDER BY created_at DESC");
     conn.release();
