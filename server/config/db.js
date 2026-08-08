@@ -16,15 +16,15 @@ async function initializeDatabase() {
     console.log("📦 Creating database if not exists...");
     
     // Create database
-    await connection.execute(
+    await connection.query(
       `CREATE DATABASE IF NOT EXISTS \`marwadi_meal_club\``
     );
     console.log("✅ Database created/exists");
 
     // Use database
-    await connection.execute(`USE \`marwadi_meal_club\``);
+    await connection.query(`USE \`marwadi_meal_club\``);
 
-    // Create bookings table
+    // Create bookings table (using query instead of execute for DDL)
     const createTableQuery = `
       CREATE TABLE IF NOT EXISTS \`bookings\` (
         \`id\` INT AUTO_INCREMENT PRIMARY KEY,
@@ -40,7 +40,7 @@ async function initializeDatabase() {
       ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci
     `;
     
-    await connection.execute(createTableQuery);
+    await connection.query(createTableQuery);
     console.log("✅ Bookings table created/exists");
 
     isInitialized = true;
