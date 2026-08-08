@@ -8,7 +8,7 @@ const plans = [
     subtitle: "₹80 Per Tiffin",
     popular: false,
     features: [
-      "5 Fresh Rotis",
+      "4 Fresh Rotis",
       "1 Bowl Dal",
       "1 Bowl Seasonal Sabzi",
       "Rice",
@@ -23,7 +23,7 @@ const plans = [
     features: [
       "Lunch Included",
       "Dinner Included",
-      "5 Fresh Rotis",
+      "4 Fresh Rotis",
       "Dal",
       "Seasonal Sabzi",
       "Rice",
